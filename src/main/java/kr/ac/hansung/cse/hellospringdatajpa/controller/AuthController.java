@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AuthController {
@@ -36,8 +37,17 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(@RequestParam(value = "error", required = false) String error,
+                            Model model) {
+        if (error != null) {
+            model.addAttribute("loginError", "이메일 또는 비밀번호가 올바르지 않습니다.");
+        }
         return "login"; // templates/login.html
     }
+
+    /*@GetMapping("/login")
+    public String loginForm() {
+        return "login"; // templates/login.html
+    }*/
 }
 
