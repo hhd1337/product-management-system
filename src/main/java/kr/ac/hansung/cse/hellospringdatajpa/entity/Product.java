@@ -28,4 +28,5 @@ public class Product {
         this.madeIn = madeIn;
         this.price = price;
     }
+
 }
