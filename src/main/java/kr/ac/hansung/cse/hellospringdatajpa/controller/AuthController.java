@@ -1,11 +1,14 @@
 package kr.ac.hansung.cse.hellospringdatajpa.controller;
 
 
+import jakarta.validation.Valid;
+import kr.ac.hansung.cse.hellospringdatajpa.dto.RegisterRequestDTO;
 import kr.ac.hansung.cse.hellospringdatajpa.entity.User;
 import kr.ac.hansung.cse.hellospringdatajpa.repo.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +25,7 @@ public class AuthController {
         this.passwordEncoder = encoder;
     }
 
-    @GetMapping("/register")
+    /*@GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new User());
         return "register"; // templates/register.html
@@ -34,7 +37,32 @@ public class AuthController {
         user.setRole("ROLE_USER");
         userRepository.save(user);
         return "redirect:/login";
+    }*/
+    @GetMapping("/register")
+    public String registerForm(Model model) {
+        model.addAttribute("registerForm", new RegisterRequestDTO());
+        return "register";
     }
+
+    @PostMapping("/register")
+    public String registerSubmit(
+            @ModelAttribute("registerForm") @Valid RegisterRequestDTO form,
+            BindingResult bindingResult,
+            Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "register"; // 유효성 오류가 있으면 다시 등록 폼으로
+        }
+
+        User user = new User();
+        user.setEmail(form.getEmail());
+        user.setPassword(passwordEncoder.encode(form.getPassword()));
+        user.setRole(form.getRole());
+
+        userRepository.save(user);
+        return "redirect:/login";
+    }
+
 
     @GetMapping("/login")
     public String loginForm(@RequestParam(value = "error", required = false) String error,
