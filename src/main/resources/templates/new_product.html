@@ -16,19 +16,27 @@
                 <div class="mb-3">
                     <label for="productName" class="form-label">Product Name:</label>
                     <input type="text" id="productName" class="form-control" th:field="*{name}" />
+                    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger small"></div>
                 </div>
+
                 <div class="mb-3">
                     <label for="brand" class="form-label">Brand:</label>
                     <input type="text" id="brand" class="form-control" th:field="*{brand}" />
+                    <div th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}" class="text-danger small"></div>
                 </div>
+
                 <div class="mb-3">
                     <label for="madeIn" class="form-label">Made In:</label>
                     <input type="text" id="madeIn" class="form-control" th:field="*{madeIn}" />
+                    <div th:if="${#fields.hasErrors('madeIn')}" th:errors="*{madeIn}" class="text-danger small"></div>
                 </div>
+
                 <div class="mb-3">
                     <label for="price" class="form-label">Price:</label>
-                    <input type="text" id="price" class="form-control" th:field="*{price}" />
+                    <input type="number" id="price" class="form-control" th:field="*{price}" step="0.01" />
+                    <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger small"></div>
                 </div>
+
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
