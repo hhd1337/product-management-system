@@ -3,6 +3,7 @@ package kr.ac.hansung.cse.hellospringdatajpa.config;
 import kr.ac.hansung.cse.hellospringdatajpa.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,6 +42,10 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/**").hasAnyRole("USER", "ADMIN") //GET 요청에 대한 리소스는 권한 상관없이 모두 접근가능
+                        .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN") //권한 별 기능제한: ROLE_ADMIN만 POST, PUT, DELETE 가능하도록 함.
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -52,8 +57,9 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .authenticationProvider(authenticationProvider()) // 커스텀 인증 프로바이더 등록
+                .authenticationProvider(authenticationProvider())
                 .build();
     }
+
 }
 
