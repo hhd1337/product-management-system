@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:insert="~{common :: commonHead}">
   <title>Product Manager</title>
@@ -8,8 +9,16 @@
 
 <body>
 <div class="container">
+  <p sec:authorize="isAuthenticated()">
+    안녕하세요, <span sec:authentication="name"></span> 님!
+  </p>
+  <p sec:authorize="hasRole('USER')">※ 상품 목록은 읽기 전용입니다.</p>
+  <p sec:authorize="hasRole('ADMIN')">※ 관리자 모드입니다. 상품을 추가, 수정, 삭제할 수 있습니다.</p>
   <h1 class="mt-5">Product List</h1>
-  <a class="btn btn-primary mb-3" th:href="@{/products/new}">Create New Product</a>
+  <!--<a class="btn btn-primary mb-3" th:href="@{/products/new}">Create New Product</a>-->
+  <a class="btn btn-primary mb-3"
+     th:href="@{/products/new}"
+     sec:authorize="hasRole('ADMIN')">Create New Product</a>
 
   <table class="table table-bordered">
     <thead>
@@ -30,8 +39,14 @@
       <td th:text="${product.madeIn}">Made in</td>
       <td th:text="${product.price}">Price</td>
       <td>
-        <a class="btn btn-primary btn-sm" th:href="@{'/products/edit/' + ${product.id}}">Edit</a>
-        <a class="btn btn-danger btn-sm" th:href="@{'/products/delete/' + ${product.id}}">Delete</a>
+        <!--<a class="btn btn-primary btn-sm" th:href="@{'/products/edit/' + ${product.id}}">Edit</a>
+        <a class="btn btn-danger btn-sm" th:href="@{'/products/delete/' + ${product.id}}">Delete</a>-->
+        <a class="btn btn-primary btn-sm"
+           th:href="@{'/products/edit/' + ${product.id}}"
+           sec:authorize="hasRole('ADMIN')">Edit</a>
+        <a class="btn btn-danger btn-sm"
+           th:href="@{'/products/delete/' + ${product.id}}"
+           sec:authorize="hasRole('ADMIN')">Delete</a>
       </td>
     </tr>
     </tbody>
