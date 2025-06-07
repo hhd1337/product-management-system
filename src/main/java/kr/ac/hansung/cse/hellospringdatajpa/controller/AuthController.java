@@ -25,26 +25,13 @@ public class AuthController {
         this.passwordEncoder = encoder;
     }
 
-    /*@GetMapping("/register")
-    public String registerForm(Model model) {
-        model.addAttribute("user", new User());
-        return "register"; // templates/register.html
-    }
-
-    @PostMapping("/register")
-    public String registerSubmit(@ModelAttribute User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("ROLE_USER");
-        userRepository.save(user);
-        return "redirect:/login";
-    }*/
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("registerForm", new RegisterRequestDTO());
         return "register";
     }
 
-    @PostMapping("/register")
+    /*@PostMapping("/register")
     public String registerSubmit(
             @ModelAttribute("registerForm") @Valid RegisterRequestDTO form,
             BindingResult bindingResult,
@@ -61,7 +48,33 @@ public class AuthController {
 
         userRepository.save(user);
         return "redirect:/login";
+    }*/
+    @PostMapping("/register")
+    public String registerSubmit(
+            @ModelAttribute("registerForm") @Valid RegisterRequestDTO form,
+            BindingResult bindingResult,
+            Model model) {
+
+        if (bindingResult.hasErrors()) {
+            return "register"; // 유효성 오류 시 다시 등록 폼
+        }
+
+        User user = new User();
+        user.setEmail(form.getEmail());
+        user.setPassword(passwordEncoder.encode(form.getPassword()));
+
+        // ROLE_ADMIN 직접 선택 방지, 대신 승인 대기 상태로 저장
+        if ("ROLE_ADMIN_REQUESTED".equals(form.getRole())) {
+            user.setRole("ROLE_ADMIN_REQUESTED");
+            model.addAttribute("adminRequestInfo", "관리자 승인이 필요하며 며칠이 소요될 수 있습니다.");
+        } else {
+            user.setRole("ROLE_USER");
+        }
+
+        userRepository.save(user);
+        return "redirect:/login";
     }
+
 
 
     @GetMapping("/login")
