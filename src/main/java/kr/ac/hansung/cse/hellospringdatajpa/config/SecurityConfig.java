@@ -50,7 +50,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // 커스텀 로그인 페이지 경로
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/login?success", true)
                         .failureUrl("/login?error=true") // 실패 시 ?error=true 파라미터 추가
                         .permitAll()
                 )

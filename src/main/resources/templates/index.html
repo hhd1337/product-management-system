@@ -43,32 +43,32 @@
 
 <body>
 
-<!-- ✅ 공통 헤더 -->
+<!-- 공통 헤더 -->
 <div th:insert="~{header :: body}"></div>
 
 
 
 
 <div class="container">
-  <!-- ✅ 관리자 전용 안내 배너 -->
+  <!-- 관리자 전용 안내 배너 -->
   <div sec:authorize="hasRole('ADMIN')"
        style="background-color: #fff3cd; border-left: 6px solid #ffeeba; padding: 15px; margin-bottom: 20px; font-weight: bold; color: #856404; border-radius: 4px;">
     안녕하세요, <span sec:authentication="name"></span> 님!<br/>
     ※ 관리자 모드입니다. 상품을 추가, 수정, 삭제할 수 있습니다. 또 관리자계정 승인 대기목록과 전체사용자를 조회할 수 있습니다.
   </div>
-  <!-- ✅ 일반사용자 전용 안내 배너 -->
+  <!-- 일반사용자 전용 안내 배너 -->
   <div sec:authorize="hasRole('USER')"
        style="background-color: #fff3cd; border-left: 6px solid #ffeeba; padding: 15px; margin-bottom: 20px; font-weight: bold; color: #856404; border-radius: 4px;">
     안녕하세요, <span sec:authentication="name"></span> 님!<br/>
     ※ 일반사용자이십니다! 상품조회 기능만 이용할 수 있습니다.
   </div>
-  <!-- ✅ 관리자 승인대기중 사용자 전용 안내 배너 -->
+  <!-- 관리자 승인대기중 사용자 전용 안내 배너 -->
   <div sec:authorize="hasRole('ADMIN_REQUESTED')"
        style="background-color: #fff3cd; border-left: 6px solid #ffeeba; padding: 15px; margin-bottom: 20px; font-weight: bold; color: #856404; border-radius: 4px;">
     안녕하세요, <span sec:authentication="name"></span> 님!<br/>
     ※ 관리자 계정 승인 대기중이십니다! 승인 이전까지 상품조회 기능만 이용할 수 있습니다.
   </div>
-  <!-- ✅ 관리자 전용 버튼 -->
+  <!-- 관리자 전용 버튼 -->
   <div sec:authorize="hasRole('ADMIN')" style="display: flex; justify-content: flex-end; gap: 10px; margin: 12px 24px;">
     <a th:href="@{/admin/approvals}"
        style="background-color: white; color: #ffc107; border: 2px solid #ffc107; padding: 8px 14px; font-weight: bold; border-radius: 6px; text-decoration: none;">
@@ -117,7 +117,7 @@
   </table>
 </div>
 
-<!-- ✅ Bootstrap JS -->
+<!-- Bootstrap JS -->
 <div th:insert="~{common :: commonScript}"></div>
 </body>
 </html>
