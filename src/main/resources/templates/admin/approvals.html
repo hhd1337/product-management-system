@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 승인 요청 목록</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 40px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #343a40;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        th, td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+
+        .btn-approve {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-approve:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<!-- ✅ 헤더 삽입 -->
+<div th:insert="~{header :: body}"></div>
+
+<div class="container">
+    <h2>승인 대기 중인 관리자 요청</h2>
+
+    <div th:if="${#lists.isEmpty(pendingAdmins)}">
+        <p>현재 승인 대기 중인 사용자가 없습니다.</p>
+    </div>
+
+    <table class="table table-striped" th:if="${!#lists.isEmpty(pendingAdmins)}">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>이메일</th>
+            <th>현재 권한</th>
+            <th>승인</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${pendingAdmins}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.email}">email@example.com</td>
+            <td th:text="${user.role}">ROLE_ADMIN_REQUESTED</td>
+            <td>
+                <form th:action="@{'/admin/approve/' + ${user.id}}" method="post">
+                    <button type="submit" class="btn btn-approve btn-sm">승인</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

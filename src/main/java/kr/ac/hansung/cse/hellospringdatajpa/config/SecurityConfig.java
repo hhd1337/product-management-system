@@ -42,7 +42,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/register", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products/**").hasAnyRole("USER", "ADMIN") //GET 요청에 대한 리소스는 권한 상관없이 모두 접근가능
+                        .requestMatchers(HttpMethod.GET, "/products/**").hasAnyRole("USER", "ADMIN", "ADMIN_REQUESTED") // GET 요청은 세 권한 모두 허용
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole("ADMIN") //권한 별 기능제한: ROLE_ADMIN만 POST, PUT, DELETE 가능하도록 함.
@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login") // 커스텀 로그인 페이지 경로
                         .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true") // 실패 시 ?error=true 파라미터 추가
                         .permitAll()
                 )
                 .logout(logout -> logout

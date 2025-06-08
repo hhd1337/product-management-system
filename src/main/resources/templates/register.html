@@ -70,12 +70,20 @@
 
 <div class="form-container">
     <h2>회원가입</h2>
-    <form th:action="@{/register}" th:object="${user}" method="post">
+    <form th:action="@{/register}" th:object="${registerForm}" method="post">
         <label for="email">이메일</label>
         <input type="email" id="email" th:field="*{email}" required />
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
 
         <label for="password">비밀번호</label>
         <input type="password" id="password" th:field="*{password}" required />
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+
+        <label for="email">사용자 권한(ROLE)</label>
+        <select th:field="*{role}">
+            <option value="ROLE_USER">일반 사용자</option>
+            <option value="ROLE_ADMIN_REQUESTED">관리자 권한 요청</option>
+        </select>
 
         <button type="submit">가입하기</button>
     </form>
