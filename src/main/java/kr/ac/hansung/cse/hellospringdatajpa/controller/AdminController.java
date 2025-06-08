@@ -34,4 +34,12 @@ public class AdminController {
         userRepository.save(user);
         return "redirect:/admin/approvals";
     }
+
+    @GetMapping("/users")
+    public String listAllUsers(Model model) {
+        List<User> users = userRepository.findAll();
+        model.addAttribute("users", users);
+        return "admin/users"; // templates/admin/users.html
+    }
+
 }
